@@ -6,12 +6,5 @@ setup(
     author="Shubham Gupta",
     author_email="shubhamgupta43567@gmail.com",
     packages=find_packages(),
-    install_requires=[
-        "pinecone-haystack",
-        "haystack-ai",
-        "fastapi",
-        "uvicorn",
-        "python-dotenv", 
-        "pathlib"
-    ]
+    install_requires=[]
 )
