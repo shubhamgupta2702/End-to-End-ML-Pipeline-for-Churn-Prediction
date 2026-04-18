@@ -1,0 +1,7 @@
+# -e .  # automatically triggers setup.py file.
+numpy
+pandas
+matplotlib
+seaborn 
+scikit-learn
+typing
