@@ -16,8 +16,3 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger("ai-assistant")
-
-#Now you can log using
-# logger.info("")
-# logger.error("")
-# logger.warning("") and so on.
