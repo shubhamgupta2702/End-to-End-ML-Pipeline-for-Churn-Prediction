@@ -1,6 +1,6 @@
 import sys
 
-class Customexception(Exception):
+class CustomException(Exception):
     def __init__(self, error_message, error_details: sys):
         self.error_message = error_message
 
