@@ -15,4 +15,4 @@ logging.basicConfig(
     format="[%(asctime)s] %(lineno)d %(name)s - %(levelname)s - %(message)s"
 )
 
-logger = logging.getLogger("ai-assistant")
+logger = logging.getLogger("End to End ML Pipeline for Churn Prediction")
