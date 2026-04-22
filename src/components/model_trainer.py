@@ -41,27 +41,66 @@ class ModelTrainer:
       models = {
         "Logistic Regression": LogisticRegression(class_weight='balanced', random_state=42),
         
-        "Random Forest": RandomForestClassifier(
-        n_estimators = 200,
-        class_weight = 'balanced',
-        random_state = 42),
+        "Random Forest": RandomForestClassifier(random_state=42),
         
-        "XGBoost Classifier": XGBClassifier(
-        n_estimators=200,
-        learning_rate=0.05,
-        max_depth=4,
-        subsample=0.8,
-        colsample_bytree=0.8,
-        scale_pos_weight=scale_pos_weight,
-        random_state=42,
-        eval_metric='logloss'),
+        "XGBoost Classifier": XGBClassifier(),
         
         "CatBoost Classifier": CatBoostClassifier(verbose=0, random_state=42),
         "Gradient Boosting": GradientBoostingClassifier(),
         "AdaBoost Classifier": AdaBoostClassifier()
       }
       
-      model_report:dict = evaluate_model(X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test, models = models)
+      params = {
+
+    "Logistic Regression": {
+        "C": [0.01, 0.1, 1, 10],
+        "solver": ["liblinear", "saga"],
+        "max_iter": [500, 1000]
+    },
+
+    "Random Forest": {
+        "n_estimators": [100, 200],
+        "max_depth": [None, 10, 20],
+        "min_samples_split": [2, 5],
+        "min_samples_leaf": [1, 2, 4],
+        "max_features": ["sqrt", "log2"]
+    },
+
+    "XGBoost Classifier": {
+        "n_estimators": [100, 200],
+        "learning_rate": [0.01, 0.05],
+        "max_depth": [3, 4, 6],
+        "subsample": [0.7, 0.8],
+        "colsample_bytree": [0.7, 0.8],
+        "gamma": [0, 0.1],
+        "reg_alpha": [0, 0.1],
+        "reg_lambda": [1, 1.5],
+        "scale_pos_weight": [1, 3, 5]
+    },
+
+    "CatBoost Classifier": {
+        "iterations": [100, 200],
+        "learning_rate": [0.01, 0.05],
+        "depth": [4, 6],
+        "l2_leaf_reg": [3, 5, 7]
+    },
+
+    "Gradient Boosting": {
+        "n_estimators": [100, 200],
+        "learning_rate": [0.01, 0.05],
+        "max_depth": [3, 4],
+        "min_samples_split": [2, 5],
+        "min_samples_leaf": [1, 2],
+        "subsample": [0.8, 1.0]
+    },
+
+    "AdaBoost Classifier": {
+        "n_estimators": [50, 100, 200],
+        "learning_rate": [0.01, 0.1, 1]
+    }
+}
+      
+      model_report:dict = evaluate_model(X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test, models = models, param = params)
       
       print("\nModel Performance:")
       for model_name, score in model_report.items():
@@ -85,18 +124,29 @@ class ModelTrainer:
       )
       logger.info("Best Model Dumped in artifacts")
       
-      predicted = best_model.predict(X_test)
-      recall = recall_score(y_test, predicted)
+      y_probs = best_model.predict_proba(X_test)[:, 1]
+      
+      print("\nThreshold Tuning:")
+      
+      preds = (y_probs >= 0.5).astype(int)
+          
+      precision = precision_score(y_test, preds)
+      recall = recall_score(y_test, preds)
+      f1 = f1_score(y_test, preds)
+          
+      print(f"Precision: {precision:.3f} | Recall: {recall:.3f} | F1: {f1:.3f}")
+          
+      # recall = recall_score(y_test, predicted)
       
       logger.info("prediction and recall_score is measured.")
       
-      precision = precision_score(y_test, predicted)
-      print("Precision:", precision)
+      # precision = precision_score(y_test, predicted)
+      # print("Precision:", precision)
       
       print(f'Best Model name: {models[best_model_name]}')
       logger.info(f"Model Trained Successfully.Best Model Name is : {{models[best_model_name]}}")
       
-      return recall
+      return f1
       
     except Exception as e:
       logger.info("Error while dumping the model and training it.")
