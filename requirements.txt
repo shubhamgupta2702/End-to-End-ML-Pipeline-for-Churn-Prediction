@@ -8,3 +8,8 @@ typing
 dill
 xgboost
 catboost
+fastapi
+uvicorn
+python-multipart
+pydantic 
+typing-extensions

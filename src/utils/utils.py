@@ -1,5 +1,6 @@
 import os
 import sys
+import joblib
 import dill
 from src.logger.logger import logger
 from src.exception.exception import CustomException
@@ -59,3 +60,17 @@ def evaluate_model(X_train, y_train, X_test, y_test, models, param):
   except Exception as e:
     logger.info("Error in evaluate model function in utils.py")
     raise CustomException(e, sys)
+  
+  
+def load_object(file_path:str):
+  try:
+    with open(file_path, "rb") as file_obj:
+      model = dill.load(file_obj)
+      logger.info("Succesfully loaded the object in utils.py")
+      return model
+      
+  except Exception as e:
+    logger.info("Error in load_object function in utils.py")
+    raise CustomException(e, sys)
+    
+  
