@@ -61,7 +61,7 @@ def predict_data_point(customer: CustomerChurn):
     except Exception:
         probability = None
 
-        # Map output
+    
     churn_label = "Yes" if prediction == 1 else "No"
 
     response = {
