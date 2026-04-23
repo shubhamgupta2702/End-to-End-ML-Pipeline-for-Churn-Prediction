@@ -1,0 +1,32 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+myvenv/
+venv/
+
+# Git
+.git/
+.gitignore
+
+# Logs
+logs/
+
+# Notebooks
+notebook/
+
+# Tests (optional)
+tests/
+
+# Cache
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large unnecessary files
+catboost_info/
+experiment/
