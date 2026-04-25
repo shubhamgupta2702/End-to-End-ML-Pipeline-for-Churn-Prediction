@@ -98,3 +98,4 @@ class CustomerChurn(BaseModel):
 class PredictionResponse(BaseModel):
     prediction: str = Field(..., description="Churn prediction", examples=['Yes', 'No'])
     probability: Optional[float] = Field(None, description="Churn probability", examples=[0.5, 0.8])
+    latency: float = Field(..., description="Latency of the prediction", examples=[0.5, 0.8])

@@ -4,6 +4,7 @@ from src.utils.utils import load_object
 from src.logger.logger import logger
 import numpy as np
 import pandas as pd 
+import time
 
 from src.pipeline.prediction_pipeline import CustomerChurn, PredictionResponse
 app = FastAPI(title="Churn Prediction API")
@@ -40,6 +41,7 @@ def health_check():
 
 @app.post('/predict', response_model=PredictionResponse)
 def predict_data_point(customer: CustomerChurn):
+  start_time = time.time()
   try:
     
     if model is None or preprocessor is None:
@@ -63,10 +65,13 @@ def predict_data_point(customer: CustomerChurn):
 
     
     churn_label = "Yes" if prediction == 1 else "No"
+    
+    latency = time.time() - start_time
 
     response = {
             "prediction": churn_label,
-            "probability": float(probability) if probability is not None else None
+            "probability": float(probability) if probability is not None else None,
+            "latency": round(latency * 1000, 2)
         }
 
     logger.info(f"Prediction: {response}")
