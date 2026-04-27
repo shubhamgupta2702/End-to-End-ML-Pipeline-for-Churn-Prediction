@@ -79,6 +79,7 @@ def predict_data_point(customer: CustomerChurn):
     return response
       
   except Exception as e:
+    logger.error(f"Error during prediction: {e}")
     raise HTTPException(status_code=500, detail="Error loading model")
   
   
